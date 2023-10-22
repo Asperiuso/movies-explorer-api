@@ -12,6 +12,11 @@ const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
 
+const {
+  PORT = config.PORT,
+  DB_URL = config.DB_URL,
+} = process.env;
+
 function configureApp() {
   const app = express();
 
@@ -19,7 +24,7 @@ function configureApp() {
   app.use(express.json());
   app.use(helmet());
 
-  mongoose.connect(config.DB_URL, CORS_OPTIONS);
+  mongoose.connect(DB_URL, CORS_OPTIONS);
 
   app.use(requestLogger);
 
@@ -39,7 +44,6 @@ function configureApp() {
   return app;
 }
 
-const PORT = process.env.PORT || config.PORT;
 const app = configureApp();
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту: ${PORT}`);
